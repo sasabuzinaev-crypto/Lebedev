@@ -1,116 +1,71 @@
-// vector.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
-
 #include <iostream>
-#include "Header.h"
+#include "Array.h"
+#include <ctime>
+#include <fstream>
+
 using namespace std;
-Array::Array(int startCapacity)
-{
-    if (startCapacity <= 0)
-        capacity = DEFAULT_CAPACITY;
-    else
-        capacity = startCapacity;
-    ptr = new int[capacity];
-    size = 0;
-}
-Array::~Array()
-{
-    delete[] ptr;
-}
-Array::Array(const Array& arr)
-{
-    ptr = new int[arr.capacity];
-    size = arr.size;
-    capacity = arr.capacity;
-    for (int i = 0; i < size; i++)
-        ptr[i] = arr.ptr[i];
-}
-Array& Array::operator =(const Array& arr)
-{
-    if (this == &arr)
-        return *this;
-    if (capacity != arr.capacity)
-    {
-        delete[] ptr;
-        ptr = new int[arr.capacity];
-        capacity = arr.capacity;
-    }
-    size = arr.size;
-    for (int i = 0; i < size; i++)
-        ptr[i] = arr.ptr[i];
-    return *this;
-}
-int& Array::operator [](int index)
-{
-    if (index >= size || index < 0)
-        throw ArrayException();
-    else
-        return ptr[index];
-}
-void Array::insert(int elem, int index)
-{
-    if (index < 0 || index > size)
-        throw ArrayException();
-    if (size == capacity)
-       
-        increaseCapacity(size + 1);
-    
-    for (int j = size - 1; j >= index; j--)
-        ptr[j + 1] = ptr[j];
-    size++;
-    ptr[index] = elem;
-}
-void Array::insert(int elem)
-{
-    insert(elem, size);
-}
-void Array::increaseCapacity(int newCapacity) {
-    capacity = newCapacity < capacity * 2 ?
-        capacity * 2 : newCapacity;
-    int* newPtr = new int[capacity];
-    for (int i = 0; i < size; i++)
-        newPtr[i] = ptr[i];
-    delete[] ptr;
-    ptr = newPtr;
-}
-void Array::remove(int index)
-{
-    if (index < 0 || index >= size)
-        throw ArrayException();
-    for (int j = index; j < size - 1; j++)
-        ptr[j] = ptr[j + 1];
-    ptr[size - 1] = 0;
-    size--;
-}
-int Array::getSize() const
-{
-    return size;
-}
-ostream& operator <<(ostream& out,
-    const Array& arr)
-{
-    out << "Total size: " << arr.size << endl;
-    for (int i = 0; i < arr.size; i++)
-        out << arr.ptr[i] << endl;
-    return out;
+
+Array IosifeFlaviya(Array* arr, int N, int k){
+	Array a = *arr;
+	int index = 0;
+	while(a.getSize() > 0){
+		index = (index + k - 1) % a.getSize();
+		a.remove(index);
+	}
+	return a;
 }
 
 int main()
 {
+    
+    int arr1[]= {1000,5000,10000,50000,100000,500000,1000000};
+    
+    
+    ofstream csv("/Users/sashabuzinaevicloud.com/Desktop/qq/qq/josephus.csv");
+    csv << "N,k,time\n";
+    if(!csv){
+        cout << "Ошибка открытия файла\n";
+        return 1;
+    }
     setlocale(LC_ALL, "Russian");
-    Array arr(4);
-    for (int i = 0; i < 4; i++)
-        arr.insert(i + 1);
-    cout << arr << endl;
-    for (int i = 0; i < 8; i += 2)
-        arr.insert(10 + i, i);
-    cout << arr << endl;
-    for (int i = 1; i < 8; i += 2)
-        arr[i] = 20 + i;
-    cout << arr << endl;
-    for (int i = 6; i >= 0; i -= 3)
-        arr.remove(i);
-    cout << arr << endl;
+    Array arr(3);
+   for (int i = 0; i < 4; i++)
+       arr.insert(i + 1);
+   cout << arr << endl;
+   for (int i = 0; i < 8; i += 2)
+       arr.insert(10 + i, i);
+   cout << arr << endl;
+   for (int i = 1; i < 8; i += 2)
+       arr[i] = 20 + i;
+   cout << arr << endl;
+   for (int i = 6; i >= 0; i -= 3)
+       arr.remove(i);
+   cout << arr << endl;
+ofstream csv("results.csv");
+	csv << "N,k,Time\n";
+	int arr1[]= {1000,5000,10000,50000,100000,500000,1000000};
+	int size = sizeof(arr1)/sizeof(arr1[0]);
+
+	for (int i = 0;i<size;i++){
+		const int k =2;
+		int N = arr1[i];
+		Array arr(N);
+		for (int j = 0; j < N-1; j++){
+			arr.insert(j + 1);	
+			
+		}
+		clock_t startTime = clock();
+		IosifeFlaviya(&arr, N, k);
+		clock_t endTime = clock();
+		double elapsedTime = double(endTime - startTime) / CLOCKS_PER_SEC;
+		csv << N << "," << k << "," << elapsedTime << "\n";
+        cout<<i;
+
+	}
+	cout<<"Готово!"<<endl;
+	return 0;
+
 }
+
 
 
