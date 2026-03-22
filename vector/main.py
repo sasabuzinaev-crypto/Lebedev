@@ -15,7 +15,7 @@ ax_l.plot(N, times, marker="o")
 ax_l.set_xscale("log")
 ax_l.set_xlabel("N")
 ax_l.set_ylabel("Time (s)")
-ax_l.set_title("Josephus Problem")
+ax_l.set_title("Мой алгоритм")
 
 
 logN = np.log10(N)
@@ -32,7 +32,7 @@ mark_N = 5_000_000
 mark_time = float(10 ** (intercept + slope * np.log10(mark_N)))
 ax_r.scatter([mark_N], [mark_time], color="black", zorder=6)
 ax_r.scatter([mark_N], [mark_time], color="black", zorder=6)
-ax_r.annotate(f"{mark_time:.1f} s at 5 миллионов",
+ax_r.annotate(f"{mark_time:.1f} секунд на 5 миллионах",
               xy=(mark_N, mark_time),
               xytext=(0, 12),
               textcoords="offset points",
