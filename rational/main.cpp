@@ -13,7 +13,7 @@ void squareEquation(const Rational& a, const Rational& b, const Rational& c){
         double x = - (double)b.num / b.denom / ((double)c.num / c.denom);
         cout << "x = " << x << "\n";
         return;
-        cout << "Not a quadratic equation." << endl;
+        cout << "Не квадратичное уравнение" << endl;
         return;
         
     }
@@ -27,8 +27,8 @@ void squareEquation(const Rational& a, const Rational& b, const Rational& c){
     }
      try {
   Rational sqrtD = sqrtRational(D);
-        Rational x1 = (-b + sqrtD) / (a*two);
-        Rational x2 = (-b - sqrtD) / (a*two);
+        Rational x1 = (-b + sqrtD) / (-a*two);
+        Rational x2 = (-b - sqrtD) / (-a*two);
         cout << "x1 = " << x1 << ", x2 = " << x2 << "\n";
     } catch (runtime_error& e) {
         cout << "Error: " << "\n";
@@ -45,7 +45,7 @@ int main() {
     b = Rational(b.num, b.denom);
     c = Rational(c.num, c.denom);
 
-  cout << "\n--- Тестирование арифметики ---\n";
+  cout << "\n--- Тестирование---\n";
 
 // сложение
 Rational sum = a + b;
@@ -78,7 +78,7 @@ cout << "8/12 simplified = " << r1 << "\n";
 
 // FromDouble
 double x = 0.75;
-Rational r2 = FromDouble(x);
+Rational r2 = FromDouble(x,10000.0,1000);
 cout << "FromDouble(0.75) = " << r2 << "\n";
 
 squareEquation(a, b, c);
