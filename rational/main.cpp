@@ -1,86 +1,104 @@
 #include <iostream>
 #include "rational.h"
+
 using namespace std;
 
+void solveQuadratic(const Rational& coefA,
+                    const Rational& coefB,
+                    const Rational& coefC)
+{
+    if (coefA.num == 0) {
 
-
-void squareEquation(const Rational& a, const Rational& b, const Rational& c){
-    if (a.num == Rational(0).num) {
-        if (b.num ==Rational(0).num) {
-            cout<<"нет решения"<<endl;
+        if (coefB.num == 0) {
+            cout << "Нет решения\n";
             return;
         }
-        double x = - (double)b.num / b.denom / ((double)c.num / c.denom);
-        cout << "x = " << x << "\n";
-        return;
-        cout << "Не квадратичное уравнение" << endl;
-        return;
-        
-    }
-    Rational four(4,1);
-    Rational two(2,1);
 
-    Rational D = b*b - four*a*c;
-     if (D.num < 0) {
+        double root =
+            - (double)coefC.num / coefC.denom /
+            ((double)coefB.num / coefB.denom);
+
+        cout << "x = " << root << "\n";
+        return;
+    }
+
+    Rational constFour(4,1);
+    Rational constTwo(2,1);
+
+    Rational discriminant =
+        coefB * coefB - constFour * coefA * coefC;
+
+    if (discriminant.num < 0) {
         cout << "Нет вещественных рациональных корней\n";
         return;
     }
-     try {
-  Rational sqrtD = sqrtRational(D);
-        Rational x1 = (-b + sqrtD) / (-a*two);
-        Rational x2 = (-b - sqrtD) / (-a*two);
-        cout << "x1 = " << x1 << ", x2 = " << x2 << "\n";
-    } catch (runtime_error& e) {
-        cout << "Error: " << "\n";
+
+    try {
+
+        Rational sqrtD = sqrtRational(discriminant);
+
+        Rational root1 =
+            (-coefB + sqrtD) / (-coefA * constTwo);
+
+        Rational root2 =
+            (-coefB - sqrtD) / (-coefA * constTwo);
+
+        cout << "x1 = " << root1
+             << ", x2 = " << root2 << "\n";
+
+    } catch (...) {
+        cout << "Ошибка вычисления корня\n";
     }
- }
+}
 
-int main() {
-    Rational a, b, c;
-    cout << "a (num denom): "; cin >> a.num >> a.denom;
-    cout << "b (num denom): "; cin >> b.num >> b.denom;
-    cout << "c (num denom): "; cin >> c.num >> c.denom;
+int main()
+{
+    Rational coefA, coefB, coefC;
 
-    a = Rational(a.num, a.denom);
-    b = Rational(b.num, b.denom);
-    c = Rational(c.num, c.denom);
+    cout << "a (num denom): ";
+    cin >> coefA.num >> coefA.denom;
 
-  cout << "\n--- Тестирование---\n";
+    cout << "b (num denom): ";
+    cin >> coefB.num >> coefB.denom;
 
-// сложение
-Rational sum = a + b;
-cout << "a + b = " << sum << "\n";
+    cout << "c (num denom): ";
+    cin >> coefC.num >> coefC.denom;
 
-// вычитание
-Rational diff = a - b;
-cout << "a - b = " << diff << "\n";
+    coefA = Rational(coefA.num, coefA.denom);
+    coefB = Rational(coefB.num, coefB.denom);
+    coefC = Rational(coefC.num, coefC.denom);
 
-// умножение
-Rational prod = a * b;
-cout << "a * b = " << prod << "\n";
+    cout << "\n--- Тестирование ---\n";
 
-// деление
-Rational quot = a / b;
-cout << "a / b = " << quot << "\n";
+    Rational sumRes = coefA + coefB;
+    cout << "a + b = " << sumRes << "\n";
 
-// унарный минус
-Rational negA = -a;
-cout << "-a = " << negA << "\n";
+    Rational diffRes = coefA - coefB;
+    cout << "a - b = " << diffRes << "\n";
 
-// сравнения
-cout << "a == b? " << (a == b ? "true" : "false") << "\n";
-cout << "a < b? " << (a < b ? "true" : "false") << "\n";
+    Rational mulRes = coefA * coefB;
+    cout << "a * b = " << mulRes << "\n";
 
-// упрощение
-Rational r1(8,12); 
-simplify(r1);
-cout << "8/12 simplified = " << r1 << "\n";
+    Rational divRes = coefA / coefB;
+    cout << "a / b = " << divRes << "\n";
 
-// FromDouble
-double x = 0.75;
-Rational r2 = FromDouble(x,10000.0,1000);
-cout << "FromDouble(0.75) = " << r2 << "\n";
+    Rational negRes = -coefA;
+    cout << "-a = " << negRes << "\n";
 
-squareEquation(a, b, c);
-    return 0;
+    cout << "a == b ? "
+         << (coefA == coefB ? "true" : "false") << "\n";
+
+    Rational testFrac(8,12);
+    simplify(testFrac);
+
+    cout << "8/12 simplified = "
+         << testFrac << "\n";
+
+    Rational fromDoubleRes =
+        FromDouble(0.75, 1e-6, 1000);
+
+    cout << "FromDouble = "
+         << fromDoubleRes << "\n";
+
+    solveQuadratic(coefA, coefB, coefC);
 }
