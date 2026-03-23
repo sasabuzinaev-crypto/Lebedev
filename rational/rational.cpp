@@ -4,157 +4,216 @@
 #include <stdexcept>
 
 using namespace std;
+
 Rational::Rational()
 {
-    num=0;
-    denom=1;
+    num = 0;
+    denom = 1;
 }
 
-Rational :: Rational(int n)
+Rational::Rational(int n)
 {
-    num=n;
-    denom=1;
+    num = n;
+    denom = 1;
 }
-Rational :: Rational(int n, int d)
-{
-    num=n;
-    denom=d;
-}   
 
-Rational& Rational::operator += (const Rational& r)
+Rational::Rational(int n, int d)
 {
-    num=num*r.denom+denom*r.num;
-    denom=denom*r.denom;
+    num = n;
+    denom = d;
+}
+
+Rational& Rational::operator += (const Rational& other)
+{
+    num = num * other.denom + denom * other.num;
+    denom = denom * other.denom;
     return *this;
 }
-istream& operator >>(istream& in, Rational& r)
+
+istream& operator>>(istream& inputStream, Rational& value)
 {
-in>>r.num>>r.denom;
-return in;
+    inputStream >> value.num >> value.denom;
+    return inputStream;
 }
-ostream& operator <<(ostream& out, const Rational& r)
+
+ostream& operator<<(ostream& outputStream, const Rational& value)
 {
-out<<r.num<<"/"<<r.denom;
-return out;
+    outputStream << value.num << "/" << value.denom;
+    return outputStream;
 }
-Rational Rational::operator +(const Rational& r) const{
-    Rational res(*this);
-    res += r;
-    return res;
+
+Rational Rational::operator+(const Rational& other) const
+{
+    Rational result(*this);
+    result += other;
+    return result;
 }
-Rational Rational::operator -() const{
-    Rational r(- num, denom);
-    return r;
+
+Rational Rational::operator-() const
+{
+    Rational temp(-num, denom);
+    return temp;
 }
-Rational Rational::operator -(const Rational& r) const{
-    Rational res(*this);
-    res += -r;
-    return res;
+
+Rational Rational::operator-(const Rational& other) const
+{
+    Rational result(*this);
+    result += -other;
+    return result;
 }
-Rational& Rational::operator -= (const Rational& r){
-    *this += -r;
+
+Rational& Rational::operator-=(const Rational& other)
+{
+    *this += -other;
     return *this;
 }
-Rational& Rational::operator ++(){
+
+Rational& Rational::operator++()
+{
     *this += Rational(1,1);
     return *this;
 }
-Rational Rational :: operator ++(int){
-    Rational res(*this);
+
+Rational Rational::operator++(int)
+{
+    Rational result(*this);
     *this += Rational(1,1);
-    return res;
+    return result;
 }
-Rational::operator int() const{
-    return num/denom;
+
+Rational::operator int() const
+{
+    return num / denom;
 }
-Rational::operator double() const{
-    return (double)num/denom;
+
+Rational::operator double() const
+{
+    return (double)num / denom;
 }
-Rational& Rational::operator *= (const Rational& r){
-    num=num*r.num;
-    denom=denom*r.denom;
+
+Rational& Rational::operator*=(const Rational& other)
+{
+    num = num * other.num;
+    denom = denom * other.denom;
     return *this;
 }
-Rational Rational::operator * (const Rational& r) const{
-    Rational res(*this);
-    res *=r;
-    return res;
+
+Rational Rational::operator*(const Rational& other) const
+{
+    Rational result(*this);
+    result *= other;
+    return result;
 }
-Rational& Rational ::operator/=(const Rational& r){
-    num = num*r.denom;
-    denom = denom*r.num;
+
+Rational& Rational::operator/=(const Rational& other)
+{
+    num = num * other.denom;
+    denom = denom * other.num;
     return *this;
 }
-Rational Rational :: operator / (const Rational& r) const{
-    Rational res(*this);
-    res /= r;
-    return res;
-}
-bool Rational :: operator!=(const Rational&r) const{
-    return num*r.denom != denom*r.num;
-}
-bool Rational :: operator<(const Rational&r) const{
-    return num*r.denom < denom*r.num;
-}
-bool Rational :: operator >(const Rational& r) const{
-    return num*r.denom > denom*r.num;
 
+Rational Rational::operator/(const Rational& other) const
+{
+    Rational result(*this);
+    result /= other;
+    return result;
 }
-bool Rational :: operator <=(const Rational& r) const{
-    return num*r.denom <= denom*r.num;
-}
-bool Rational :: operator >=(const Rational& r) const{
-    return num*r.denom >= denom*r.num;
-}
-bool Rational :: operator ==(const Rational& r) const{
-    return num*r.denom == denom*r.num;
-}   
 
-Rational& simplify (Rational& r){
-    int a =r.num;
-    int b =r.denom;
-    while(b!=0){
-        int t=b;
-        b=a%b;
-        a=t;
+bool Rational::operator!=(const Rational& other) const
+{
+    return num * other.denom != denom * other.num;
+}
+
+bool Rational::operator<(const Rational& other) const
+{
+    return num * other.denom < denom * other.num;
+}
+
+bool Rational::operator>(const Rational& other) const
+{
+    return num * other.denom > denom * other.num;
+}
+
+bool Rational::operator<=(const Rational& other) const
+{
+    return num * other.denom <= denom * other.num;
+}
+
+bool Rational::operator>=(const Rational& other) const
+{
+    return num * other.denom >= denom * other.num;
+}
+
+bool Rational::operator==(const Rational& other) const
+{
+    return num * other.denom == denom * other.num;
+}
+
+Rational& simplify(Rational& value)
+{
+    int a = value.num;
+    int b = value.denom;
+
+    while (b != 0) {
+        int t = b;
+        b = a % b;
+        a = t;
     }
-    int g =a;
-    r.num /= g;
-    r.denom /= g;
-    if(r.denom<0){
-        r.denom=-r.denom;
-        r.num=-r.num;}
-    return r;
+
+    int g = a;
+
+    value.num /= g;
+    value.denom /= g;
+
+    if (value.denom < 0) {
+        value.denom = -value.denom;
+        value.num = -value.num;
+    }
+
+    return value;
 }
 
-Rational FromDouble(double d, double eps = 1e-6, int maxDenom = 1000) {
+Rational FromDouble(double value, double eps, int maxDenom)
+{
     int denom = 1;
     int num = 0;
 
     while (denom <= maxDenom) {
-        num = round(d * denom);  
-        if (abs(d - (double)num / denom) < eps) {
-            break; 
-        }
+
+        num = round(value * denom);
+
+        if (abs(value - (double)num / denom) < eps)
+            break;
+
         denom++;
     }
 
-    Rational r(num, denom);
-    simplify(r); 
-    return r;
-}
-bool isPerfectSquare(int n) {
-    if (n < 0) return false;
-    int r = (int)std::sqrt(n);
-    return r*r == n;
+    Rational result(num, denom);
+    simplify(result);
+    return result;
 }
 
+bool isPerfectSquare(int value)
+{
+    if (value < 0) return false;
 
-Rational sqrtRational(const Rational&r){
- if (!isPerfectSquare(r.num) || !isPerfectSquare(r.denom)) {
-        throw runtime_error("Дискриминант не является квадратом рационального числа");
+    int root = (int)std::sqrt(value);
+
+    return root * root == value;
+}
+
+Rational sqrtRational(const Rational& value)
+{
+    if (!isPerfectSquare(value.num) ||
+        !isPerfectSquare(value.denom))
+    {
+        throw runtime_error(
+            "Дискриминант не является квадратом рационального числа"
+        );
     }
-    return Rational((int)sqrt(r.num), (int)sqrt(r.denom));
-}
 
- 
+    return Rational(
+        (int)sqrt(value.num),
+        (int)sqrt(value.denom)
+    );
+}
