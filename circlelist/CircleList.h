@@ -1,4 +1,3 @@
-
 #ifndef CIRCLE_LIST_H
 #define CIRCLE_LIST_H
 
@@ -12,7 +11,7 @@ class CircleListElem {
 private:
     T data;
     CircleListElem* next;
-    CircleListElem* prev;
+    CircleListElem* prev;  // добавлен prev
 public:
     CircleListElem(const T& adata, CircleListElem* anext = NULL, CircleListElem* aprev = NULL);
     const T& getData() const;
@@ -24,7 +23,7 @@ public:
 template <class T>
 class CircleList {
 private:
-    CircleListElem<T>* current;
+    CircleListElem<T>* current;  // вместо start
     int count;
     CircleList(const CircleList& list);
     CircleList& operator=(const CircleList& list);
@@ -34,10 +33,10 @@ public:
     CircleListElem<T>* getCurrent();
     int getCount() const;
     bool isEmpty() const;
-    void insertFirst(const T& data);
-    void moveToNext();
-    T removeCurrent();
-    void clear();
+    void insertFirst(const T& data);  // аналог LineList::insertFirst
+    void moveToNext();   // перемещение по кольцу
+    T removeCurrent();   //  удаление текущего
+    void clear();        // аналог LineList
 };
 
 template <class T>
@@ -87,8 +86,8 @@ void CircleList<T>::insertFirst(const T& data) {
     CircleListElem<T>* newElem = new CircleListElem<T>(data);
     if (isEmpty()) {
         current = newElem;
-        newElem->next = newElem;
-        newElem->prev = newElem;
+        newElem->next = newElem;  // замыкает сам на себя
+        newElem->prev = newElem;  //  двунаправленное кольцо
     } else {
         CircleListElem<T>* last = current->prev;
         newElem->next = current;
@@ -103,7 +102,7 @@ void CircleList<T>::insertFirst(const T& data) {
 template <class T>
 void CircleList<T>::moveToNext() {
     if (!isEmpty()) {
-        current = current->next;
+        current = current->next;  // круговое перемещение
     }
 }
 
@@ -116,7 +115,7 @@ T CircleList<T>::removeCurrent() {
     } else {
         CircleListElem<T>* nextElem = current->next;
         CircleListElem<T>* prevElem = current->prev;
-        prevElem->next = nextElem;
+        prevElem->next = nextElem;  // связываем соседей без удаляемого
         nextElem->prev = prevElem;
         current = nextElem;
     }
