@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "Lebedev",
+			"path": ".."
+		},
+		{
+			"name": "circlelist",
+			"path": "../../../circlelist"
+		}
+	],
+	"settings": {}
+}
