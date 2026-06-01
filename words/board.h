@@ -1,32 +1,29 @@
-#ifndef GAMEBOARD_H
-#define GAMEBOARD_H
+#ifndef BOARD_H
+#define BOARD_H 
 
 #include <string>
 #include <vector>
 
 class GameBoard {
 private:
-    char board[5][5]; // Сетка 5х5 из обычных букв char
+    char board[5][5]; //  5x5, хранящий одиночные символы букв
 
 public:
+    //  создает и очищает игровое поле
     GameBoard();
 
-    // Заполняет центральную (вторую) строку стартовым словом
+    // Метод для записи начального слова в центральную строку поля
     void initCentralWord(const std::string& word);
-
-    // Рисует поле в консоли
     void display() const;
-
-    // Ставит букву в указанные координаты
     void setLetter(int row, int col, char letter);
 
-    // Возвращает букву из указанной ячейки
+    // Метод, возвращающий букву, которая сейчас стоит в указанных координатах
     char getLetter(int row, int col) const;
 
-    // Проверяет, пуста ли клетка
+    // Проверка: пуста ли клетка 
     bool isEmpty(int row, int col) const;
 
-    // Проверяет, имеет ли клетка хоть одного соседа (чтобы не ставить букву в воздухе)
+    // Проверка: касается ли ячейка хотя бы одной уже занятой клетки по соседству
     bool hasNeighbors(int row, int col) const;
 };
 
