@@ -57,3 +57,4 @@ bool WordSearcher::canFormWord(const GameBoard& board, const std::string& word, 
         }
     }
     return false; 
+}

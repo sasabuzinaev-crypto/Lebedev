@@ -1,13 +1,16 @@
 #include "GameManager.h"
+#include "TextEncoding.h"
 #include <iostream>
-#include <algorithm>
+#include <cstdlib>
 
 // Конструктор игрового менеджера
 GameManager::GameManager(int players_count, const std::string& start_word, const std::string& dict_filename) 
     : dictionary(dict_filename), current_player_index(0) { // Инициализируем словарь и ставим ходить Игрока 1
     
-    board.initCentralWord(start_word); // Помещаем стартовое слово на доску
-    dictionary.addUsedWord(start_word); // Запрещаем использовать стартовое слово повторно
+    const std::string normalized_start_word = text_encoding::normalizeWordEncoding(start_word);
+
+    board.initCentralWord(normalized_start_word); // Помещаем стартовое слово на доску
+    dictionary.addUsedWord(normalized_start_word); // Запрещаем использовать стартовое слово повторно
 
     // Циклом создаем объекты игроков и даем им имена 
     for (int i = 1; i <= players_count; ++i) {
@@ -65,10 +68,18 @@ void GameManager::start() {
             continue;
         }
 
-        char letter;
+        std::string letter_input;
         std::cout << "Введите букву (ЗАГЛАВНУЮ): ";
-        std::cin >> letter; 
-        letter = ::toupper(letter); 
+        std::cin >> letter_input;
+        letter_input = text_encoding::normalizeWordEncoding(letter_input);
+
+        if (letter_input.size() != 1) {
+            std::cout << "Ошибка: Нужно ввести одну букву!\n";
+            system("pause");
+            continue;
+        }
+
+        char letter = letter_input[0];
 
         // очищаем enter
 
@@ -77,7 +88,7 @@ void GameManager::start() {
         std::cout << "Какое слово собираете? ";
         std::string word;
         std::cin >> word; // Считываем итоговое слово
-        std::transform(word.begin(), word.end(), word.begin(), ::toupper); // Делаем его заглавным
+        word = text_encoding::normalizeWordEncoding(word); // Делаем его заглавным и приводим к одной кодировке
 
         // временно устанавливаем новую букву на поле чтобы протестировать возможность сборки слова
         board.setLetter(row, col, letter);
@@ -106,7 +117,7 @@ void GameManager::start() {
             continue;
         }
         dictionary.addUsedWord(word); // Заносим слово в список использованных 
-        int points = word.length(); // Считаем очки, равные длине угаданного слова
+        int points = static_cast<int>(word.size()); // Считаем очки, равные длине угаданного слова
         current_player.addPoints(points); // Начисляем заработанные очки текущему игроку
         std::cout << "Успешно! Слово '" << word << "' принято. Получено очков: " << points << "\n";
 

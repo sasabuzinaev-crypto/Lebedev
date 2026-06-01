@@ -1,7 +1,7 @@
 #include "GameDictionary.h"
+#include "TextEncoding.h"
 #include <fstream>   
 #include <iostream>
-#include <algorithm>
 
 GameDictionary::GameDictionary(const std::string& filename) {
     std::ifstream file(filename); //  чтения файла с диска
@@ -17,13 +17,7 @@ GameDictionary::GameDictionary(const std::string& filename) {
     while (file >> line) {
         if (line.empty()) continue; // Пропускаем пустые строки если они есть
 
-        // Переводим слово из файла в верхний регистр 
-        std::transform(line.begin(), line.end(), line.begin(), ::toupper);
-
-        //  Если в конце слова застрял скрытый символ переноса строки (\r)
-        if (!line.empty() && line.back() == '\r') {
-            line.pop_back(); // Насильно отрезаем этот скрытый мусорный символ
-        }
+        line = text_encoding::normalizeWordEncoding(line);
 
         // Если после очистки слово не пустое добавляем его в быструю базу разрешенных слов
         if (!line.empty()) {

@@ -1,7 +1,8 @@
 #include "GameManager.h" 
 #include <iostream>      
-#include <algorithm>     // Библиотека для функции transform (перевод букв в верхний регистр)
+#include <cstdlib>
 #include <windows.h>     
+#include "TextEncoding.h"
 
 int main() {
     SetConsoleCP(1251);
@@ -26,11 +27,10 @@ int main() {
     std::string start_word; 
     std::cin >> start_word; // Считываем стартовое слово
 
-    // Принудительно переводим все буквы стартового слова в ЗАГЛАВНЫЕ
-    std::transform(start_word.begin(), start_word.end(), start_word.begin(), ::toupper);
+    start_word = text_encoding::normalizeWordEncoding(start_word);
 
     // Проверяем, состоит ли стартовое слово ровно из 5 букв
-    if (start_word.length() != 5) {
+    if (start_word.size() != 5) {
         std::cout << "Ошибка: Слово должно состоять ровно из 5 букв!\n";
         return 0; 
     }

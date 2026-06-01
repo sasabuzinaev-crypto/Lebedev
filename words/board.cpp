@@ -11,6 +11,10 @@ GameBoard::GameBoard() {
 
 // Запись стартового слова на поле
 void GameBoard::initCentralWord(const std::string& word) {
+    if (word.size() < 5) {
+        return;
+    }
+
     for (int j = 0; j < 5; ++j) {
         board[2][j] = word[j]; 
     }
