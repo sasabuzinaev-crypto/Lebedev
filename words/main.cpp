@@ -1,44 +1,45 @@
-#include "GameManager.h" 
-#include <iostream>      
-#include <cstdlib>
-#include <windows.h>     
-#include "TextEncoding.h"
+#include "GameManager.h"
+#include <iostream>
+#include <string>
 
 int main() {
-    SetConsoleCP(1251);
-    SetConsoleOutputCP(1251);
-    setlocale(LC_ALL, "Russian");
+    std::cout << "=== Игра 'Балда' (Версия для macOS) ===\n\n";
 
-    // Выводим приветственное сообщение игры
-    std::cout << "=== Игра 'Слова' (Версия для Windows) ===\n\n";
-
-    // Создаем переменную для хранения количества участников
     int players_count;
     std::cout << "Введите количество игроков (2-4): ";
-    std::cin >> players_count; // Считываем число игроков с клавиатуры
+    std::cin >> players_count;
 
-    // Проверяем, входит ли число игроков в допустимый диапазон от 2 до 4
+    // Очищаем потока ввода std::cin от символа перевода строки '\n'
+    std::cin.ignore(100, '\n');
+
     if (players_count < 2 || players_count > 4) {
         std::cout << "Ошибка: Игроков должно быть от 2 до 4!\n";
-        return 0; 
+        return 0;
     }
 
-    std::cout << "Введите стартовое слово из 5 букв (например, ФИНАЛ): ";
-    std::string start_word; 
-    std::cin >> start_word; // Считываем стартовое слово
+    std::cout << "Введите стартовое слово из 5 букв БОЛЬШИМИ БУКВАМИ (например, ФИНАЛ): ";
+    std::string start_word;
+    std::cin >> start_word;
 
-    start_word = text_encoding::normalizeWordEncoding(start_word);
-
-    // Проверяем, состоит ли стартовое слово ровно из 5 букв
-    if (start_word.size() != 5) {
-        std::cout << "Ошибка: Слово должно состоять ровно из 5 букв!\n";
-        return 0; 
+    // Считаем реальное число введённых русских букв в UTF-8
+    size_t letter_count = 0;
+    for (size_t i = 0; i < start_word.length(); ) {
+        if ((unsigned char)start_word[i] >= 0x80) {
+            i += 2; // Пропускаем 2 байта русской буквы
+        } else {
+            i += 1;
+        }
+        letter_count++;
     }
 
-    // Создаем объект игры «game», передавая количество игроков, стартовое слово и файл словаря
+
+    if (letter_count != 5) {
+        std::cout << "Ошибка: Слово должно состоять ровно из 5 букв! Вы ввели букв: " << letter_count << "\n";
+        return 0;
+    }
+
     GameManager game(players_count, start_word, "dictionary.txt");
-
     game.start();
 
-    return 0; 
+    return 0;
 }

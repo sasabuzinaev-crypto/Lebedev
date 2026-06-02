@@ -1,29 +1,33 @@
-#ifndef BOARD_H
-#define BOARD_H 
+#ifndef GAMEBOARD_H
+#define GAMEBOARD_H
 
 #include <string>
 #include <vector>
 
+// Класс игрового поля 5x5
 class GameBoard {
 private:
-    char board[5][5]; //  5x5, хранящий одиночные символы букв
+    std::string board[5][5];
 
 public:
-    //  создает и очищает игровое поле
     GameBoard();
 
-    // Метод для записи начального слова в центральную строку поля
+    // Заполняет центральную строку стартовым словом из 5 букв
     void initCentralWord(const std::string& word);
+
+    // Отрисовывает сетку поля в консоли
     void display() const;
-    void setLetter(int row, int col, char letter);
 
-    // Метод, возвращающий букву, которая сейчас стоит в указанных координатах
-    char getLetter(int row, int col) const;
+    // Устанавливает букву в указанные координаты поля
+    void setLetter(int row, int col, const std::string& letter);
 
-    // Проверка: пуста ли клетка 
+    // Возвращает букву из указанной ячейки поля
+    std::string getLetter(int row, int col) const;
+
+    // Проверяет пуста ли указанная клетка
     bool isEmpty(int row, int col) const;
 
-    // Проверка: касается ли ячейка хотя бы одной уже занятой клетки по соседству
+    // Проверяет граничит ли клетка хотя бы с одной уже заполненной буквой ячейкой
     bool hasNeighbors(int row, int col) const;
 };
 
